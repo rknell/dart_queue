@@ -40,7 +40,6 @@ class Queue {
     final completer = Completer();
     nextCycle.add(_QueuedFuture(closure, completer));
     unawaited(process());
-    print("Queue Size ${nextCycle.length + currentCycle.length}");
     return completer.future;
   }
 
@@ -61,8 +60,6 @@ class Queue {
       if (isCancelled == false && nextCycle.isNotEmpty) {
         await Future.microtask(() {}); //Yield to prevent stack overflow
         unawaited(process());
-      } else {
-        print("queue complete...");
       }
     }
   }
