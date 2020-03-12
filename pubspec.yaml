@@ -1,5 +1,5 @@
-name: dart_queue
-description: A starting point for Dart libraries or applications.
+name: queue
+description: Simple future queueing in dart
 version: 1.0.1
 homepage: https://github.com/rknell/dart_queue
 repository: https://github.com/rknell/dart_queue

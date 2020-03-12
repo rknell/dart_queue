@@ -1,4 +1,4 @@
-import 'package:dart_queue/dart_queue.dart';
+import 'package:queue/queue.dart';
 
 Future<void> main() async {
   final queue = Queue(delay: const Duration(milliseconds: 100));

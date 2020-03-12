@@ -1,4 +1,4 @@
-import 'package:dart_queue/dart_queue.dart';
+import 'package:queue/queue.dart';
 import 'package:test/test.dart';
 
 void main() {
