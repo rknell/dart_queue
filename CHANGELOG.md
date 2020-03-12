@@ -1,3 +1,8 @@
+## 1.0.1+1
+
+- Improving the package description
+
+
 ## 1.0.1
 
 - Removing some console output
