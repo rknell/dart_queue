@@ -2,6 +2,7 @@ name: dart_queue
 description: A starting point for Dart libraries or applications.
 version: 1.0.0
 homepage: https://github.com/rknell/dart_queue
+repository: https://github.com/rknell/dart_queue
 
 environment:
   sdk: '>=2.7.0 <3.0.0'
