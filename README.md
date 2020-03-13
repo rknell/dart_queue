@@ -19,9 +19,12 @@ main() {
   
   queue.add(()=>Future.delayed(Duration(milliseconds: 100)));
   queue.add(()=>Future.delayed(Duration(milliseconds: 10)));
-  queue.add(()=>Future.delayed(Duration(milliseconds: 1)));
+  final result = await queue.add(() async {
+      Future.delayed(Duration(milliseconds: 1);
+      return "Result Content";
+  }));
   
   //100, 10, 1 will reslove in that order.
-  
+  result == "Result Content"; //true
 }
 ```
