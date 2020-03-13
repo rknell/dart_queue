@@ -71,7 +71,7 @@ void main() {
         }).then((result) => results.add(result)),
         queue.add(() async {
           await Future.delayed(const Duration(milliseconds: 1));
-          return "result 4";
+          return "result 5";
         }).then((result) => results.add(result))
       ]);
 
@@ -79,7 +79,7 @@ void main() {
       expect(results[1], "result 2");
       expect(results[2], "result 3");
       expect(results[3], "result 4");
-      expect(results[3], "result 5");
+      expect(results[4], "result 5");
     });
   });
 }

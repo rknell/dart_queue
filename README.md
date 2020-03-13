@@ -1,3 +1,6 @@
+# queue
+[![Build Status](https://travis-ci.org/rknell/dart_queue.svg?branch=master)](https://travis-ci.org/rknell/dart_queue)
+
 Easily queue futures and await their values.
 
 This library allows you to send a future to central queue. The queue will execute the futures in the order they are queued and once complete will return the result to the function.
