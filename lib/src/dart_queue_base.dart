@@ -1,16 +1,16 @@
 import 'dart:async';
 
-class _QueuedFuture {
+class _QueuedFuture<T> {
   final Completer completer;
-  final Future Function() closure;
+  final Future<T> Function() closure;
 
   _QueuedFuture(this.closure, this.completer);
 
-  Future execute() async {
+  Future<void> execute() async {
     try {
-      final result = await closure().catchError(completer.completeError);
+      final result = await closure();
       completer.complete(result);
-      //Make sure not to execute the next commpand until this future has completed
+      //Make sure not to execute the next command until this future has completed
       await Future.microtask(() {});
     } catch (e) {
       completer.completeError(e);
@@ -18,48 +18,60 @@ class _QueuedFuture {
   }
 }
 
+/// Queue to execute Futures in order.
+/// It awaits each future before executing the next one.
 class Queue {
-  List<_QueuedFuture> nextCycle = [];
-  List<_QueuedFuture> currentCycle;
-  Duration delay;
-  bool isProcessing = false;
+  final List<_QueuedFuture> _nextCycle = [];
 
-  bool isCancelled = false;
+  /// A delay to await between each future.
+  final Duration delay;
 
+  bool _isProcessing = false;
+  bool _isCancelled = false;
+
+  bool get isCancelled => _isCancelled;
+
+  /// Cancels the queue.
+  ///
+  /// Subsquent calls to [add] will throw.
   void cancel() {
-    isCancelled = true;
+    _isCancelled = true;
   }
 
+  /// Alias for [cancel].
   void dispose() {
     cancel();
   }
 
   Queue({this.delay});
 
-  Future add(Future Function() closure) {
-    final completer = Completer();
-    nextCycle.add(_QueuedFuture(closure, completer));
-    unawaited(process());
+  /// Adds the future-returning closure to the queue.
+  ///
+  /// It will be executed after futures returned
+  /// by preceding closures have been awaited.
+  ///
+  /// Will throw an exception if the queue has been cancelled.
+  Future<T> add<T>(Future<T> Function() closure) {
+    if (isCancelled) throw Exception('Queue is cancelled');
+    final completer = Completer<T>();
+    _nextCycle.add(_QueuedFuture<T>(closure, completer));
+    unawaited(_process());
     return completer.future;
   }
 
-  Future<void> process() async {
-    if (!isProcessing) {
-      isProcessing = true;
-      currentCycle = nextCycle;
-      nextCycle = [];
-      for (final _QueuedFuture item in currentCycle) {
-        try {
-          await item.execute();
-          if (this.delay != null) await Future.delayed(delay);
-        } catch (e) {
-          print("error processing $e");
-        }
+  Future<void> _process() async {
+    if (!_isProcessing) {
+      _isProcessing = true;
+      final currentCycle = List.of(_nextCycle);
+      _nextCycle.clear();
+      for (final item in currentCycle) {
+        await item.execute();
+        if (delay != null) await Future.delayed(delay);
       }
-      isProcessing = false;
-      if (isCancelled == false && nextCycle.isNotEmpty) {
-        await Future.microtask(() {}); //Yield to prevent stack overflow
-        unawaited(process());
+      _isProcessing = false;
+      if (!_isCancelled && _nextCycle.isNotEmpty) {
+        await Future.microtask(() {}); // yield to prevent stack overflow
+        unawaited(_process());
       }
     }
   }
