@@ -40,11 +40,11 @@ class Queue {
     if (isCancelled) throw Exception('Queue is cancelled');
     final completer = Completer<T>();
     _nextCycle.add(_QueuedFuture<T>(closure, completer));
-    unawaited(process());
+    unawaited(_process());
     return completer.future;
   }
 
-  Future<void> process() async {
+  Future<void> _process() async {
     if (!_isProcessing) {
       _isProcessing = true;
       final currentCycle = List.of(_nextCycle);
@@ -56,7 +56,7 @@ class Queue {
       _isProcessing = false;
       if (!_isCancelled && _nextCycle.isNotEmpty) {
         await Future.microtask(() {}); // yield to prevent stack overflow
-        unawaited(process());
+        unawaited(_process());
       }
     }
   }
