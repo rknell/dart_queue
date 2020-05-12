@@ -18,24 +18,39 @@ class _QueuedFuture<T> {
   }
 }
 
+/// Queue to execute Futures in order.
+/// It awaits each future before executing the next one.
 class Queue {
   final List<_QueuedFuture> _nextCycle = [];
+
+  /// A delay to await between each future.
   final Duration delay;
+
   bool _isProcessing = false;
   bool _isCancelled = false;
 
   bool get isCancelled => _isCancelled;
 
+  /// Cancels the queue.
+  ///
+  /// Subsquent calls to [add] will throw.
   void cancel() {
     _isCancelled = true;
   }
 
+  /// Alias for [cancel].
   void dispose() {
     cancel();
   }
 
   Queue({this.delay});
 
+  /// Adds the future-returning closure to the queue.
+  ///
+  /// It will be executed after futures returned
+  /// by preceding closures have been awaited.
+  ///
+  /// Will throw an exception if the queue has been cancelled.
   Future<T> add<T>(Future<T> Function() closure) {
     if (isCancelled) throw Exception('Queue is cancelled');
     final completer = Completer<T>();
