@@ -1,16 +1,16 @@
 import 'dart:async';
 
-class _QueuedFuture {
+class _QueuedFuture<T> {
   final Completer completer;
-  final Future Function() closure;
+  final Future<T> Function() closure;
 
   _QueuedFuture(this.closure, this.completer);
 
-  Future execute() async {
+  Future<void> execute() async {
     try {
-      final result = await closure().catchError(completer.completeError);
+      final result = await closure();
       completer.complete(result);
-      //Make sure not to execute the next commpand until this future has completed
+      //Make sure not to execute the next command until this future has completed
       await Future.microtask(() {});
     } catch (e) {
       completer.completeError(e);
@@ -19,15 +19,15 @@ class _QueuedFuture {
 }
 
 class Queue {
-  List<_QueuedFuture> nextCycle = [];
-  List<_QueuedFuture> currentCycle;
-  Duration delay;
-  bool isProcessing = false;
+  final List<_QueuedFuture> _nextCycle = [];
+  final Duration delay;
+  bool _isProcessing = false;
+  bool _isCancelled = false;
 
-  bool isCancelled = false;
+  bool get isCancelled => _isCancelled;
 
   void cancel() {
-    isCancelled = true;
+    _isCancelled = true;
   }
 
   void dispose() {
@@ -36,29 +36,26 @@ class Queue {
 
   Queue({this.delay});
 
-  Future add(Future Function() closure) {
-    final completer = Completer();
-    nextCycle.add(_QueuedFuture(closure, completer));
+  Future<T> add<T>(Future<T> Function() closure) {
+    if (isCancelled) throw Exception('Queue is cancelled');
+    final completer = Completer<T>();
+    _nextCycle.add(_QueuedFuture<T>(closure, completer));
     unawaited(process());
     return completer.future;
   }
 
   Future<void> process() async {
-    if (!isProcessing) {
-      isProcessing = true;
-      currentCycle = nextCycle;
-      nextCycle = [];
-      for (final _QueuedFuture item in currentCycle) {
-        try {
-          await item.execute();
-          if (this.delay != null) await Future.delayed(delay);
-        } catch (e) {
-          print("error processing $e");
-        }
+    if (!_isProcessing) {
+      _isProcessing = true;
+      final currentCycle = List.of(_nextCycle);
+      _nextCycle.clear();
+      for (final item in currentCycle) {
+        await item.execute();
+        if (delay != null) await Future.delayed(delay);
       }
-      isProcessing = false;
-      if (isCancelled == false && nextCycle.isNotEmpty) {
-        await Future.microtask(() {}); //Yield to prevent stack overflow
+      _isProcessing = false;
+      if (!_isCancelled && _nextCycle.isNotEmpty) {
+        await Future.microtask(() {}); // yield to prevent stack overflow
         unawaited(process());
       }
     }
