@@ -1,6 +1,7 @@
 import 'package:queue/queue.dart';
 import 'package:test/test.dart';
 
+
 void main() {
   group('Queue', () {
     Queue queue;
@@ -81,5 +82,46 @@ void main() {
       expect(results[3], "result 4");
       expect(results[4], "result 5");
     });
+
+    test('it should run in parallel', () async {
+      final List<String> results = [];
+
+      final queueParallel = Queue(parallel: 3);
+
+      await Future.wait([
+        /// Because it runs in cycles, the first will wait for 100ms if you don't have a future first.
+        queueParallel.add(() async {
+          await Future.delayed(const Duration(milliseconds: 1));
+        }),
+        queueParallel.add(() async {
+          await Future.delayed(const Duration(milliseconds: 100));
+          return "result 1";
+        }).then((result) => results.add(result)),
+        queueParallel.add(() async {
+          await Future.delayed(const Duration(milliseconds: 50));
+          return "result 2";
+        }).then((result) => results.add(result)),
+        queueParallel.add(() async {
+          await Future.delayed(const Duration(milliseconds: 10));
+          return "result 3";
+        }).then((result) => results.add(result)),
+        queueParallel.add(() async {
+          await Future.delayed(const Duration(milliseconds: 10));
+          return "result 4";
+        }).then((result) => results.add(result)),
+        queueParallel.add(() async {
+          await Future.delayed(const Duration(milliseconds: 50));
+          return "result 5";
+        }).then((result) => results.add(result))
+      ]);
+
+      expect(results[0], "result 3");
+      expect(results[1], "result 4");
+      expect(results[2], "result 2");
+      expect(results[3], "result 5");
+      expect(results[4], "result 1");
+    });
   });
+
+
 }

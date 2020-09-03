@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.1
+
+- Adding parallel option
+
 ## 2.0.0
 
 - Futures returned by `add` are typed.

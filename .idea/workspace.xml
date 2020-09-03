@@ -2,11 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2e3968a3-4508-4a84-84af-4732bef903aa" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CHANGELOG.md" beforeDir="false" afterPath="$PROJECT_DIR$/CHANGELOG.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/dart_queue_base.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/dart_queue_base.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/queue_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/queue_test.dart" afterDir="false" />
     </list>
-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -16,7 +17,6 @@
     <option name="testRunner" value="GRADLE" />
     <option name="delegatedBuild" value="true" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="Nexus_S_API_27_Small_Screen_" />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
@@ -29,26 +29,26 @@
   </component>
   <component name="ProjectId" id="1a8q0Wxid9ocWSFccvS1hVKP8Tz" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
   <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="android.sdk.path" value="$USER_HOME$/Library/Android/sdk" />
     <property name="dart.analysis.tool.window.force.activate" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="AndroidSdkUpdater" />
     <property name="show.migrate.to.gradle.popup" value="false" />
   </component>
-  <component name="RunDashboard">
-    <option name="ruleStates">
-      <list>
-        <RuleState>
-          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
-        </RuleState>
-        <RuleState>
-          <option name="name" value="StatusDashboardGroupingRule" />
-        </RuleState>
-      </list>
-    </option>
-  </component>
-  <component name="RunManager" selected="Dart Test.tests in queue_test.dart">
+  <component name="RunManager" selected="Dart Test.it should run in parallel in queue_test.dart">
+    <configuration default="true" type="Applet">
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration default="true" type="JUnit" factoryName="JUnit">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <module name="" />
@@ -73,12 +73,6 @@
     <configuration name="&lt;template&gt;" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" default="true" selected="false">
       <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m -ea" />
     </configuration>
-    <configuration default="true" type="Applet">
-      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration default="true" type="Application" factoryName="Application">
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <method v="2">
@@ -88,6 +82,12 @@
     <configuration name="Run Tests" type="DartTestRunConfigurationType" factoryName="Dart Test">
       <option name="filePath" value="$PROJECT_DIR$/test" />
       <option name="scope" value="FOLDER" />
+      <method v="2" />
+    </configuration>
+    <configuration name="it should run in parallel in queue_test.dart" type="DartTestRunConfigurationType" factoryName="Dart Test" temporary="true" nameIsGenerated="true">
+      <option name="filePath" value="$PROJECT_DIR$/test/queue_test.dart" />
+      <option name="scope" value="GROUP_OR_TEST_BY_NAME" />
+      <option name="testName" value="it should run in parallel" />
       <method v="2" />
     </configuration>
     <configuration name="tests in queue_test.dart" type="DartTestRunConfigurationType" factoryName="Dart Test" temporary="true" nameIsGenerated="true">
@@ -107,9 +107,11 @@
     <list>
       <item itemvalue="Dart Test.Run Tests" />
       <item itemvalue="Dart Test.tests in queue_test.dart" />
+      <item itemvalue="Dart Test.it should run in parallel in queue_test.dart" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Dart Test.it should run in parallel in queue_test.dart" />
         <item itemvalue="Dart Test.tests in queue_test.dart" />
       </list>
     </recent_temporary>
@@ -127,47 +129,46 @@
     </task>
     <servers />
   </component>
-  <component name="TestHistory">
-    <history-entry file="tests_in_dart_queue_test_dart - 2020.03.13 at 08h 53m 14s.xml">
-      <configuration name="tests in dart_queue_test.dart" configurationId="DartTestRunConfigurationType" />
-    </history-entry>
-    <history-entry file="tests_in_dart_queue_test_dart - 2020.03.13 at 08h 55m 12s.xml">
-      <configuration name="tests in dart_queue_test.dart" configurationId="DartTestRunConfigurationType" />
-    </history-entry>
-    <history-entry file="tests_in_dart_queue_test_dart - 2020.03.13 at 08h 59m 04s.xml">
-      <configuration name="tests in dart_queue_test.dart" configurationId="DartTestRunConfigurationType" />
-    </history-entry>
-    <history-entry file="tests_in_dart_queue_test_dart - 2020.03.13 at 08h 59m 24s.xml">
-      <configuration name="tests in dart_queue_test.dart" configurationId="DartTestRunConfigurationType" />
-    </history-entry>
-    <history-entry file="tests_in_dart_queue_test_dart - 2020.03.13 at 09h 01m 59s.xml">
-      <configuration name="tests in dart_queue_test.dart" configurationId="DartTestRunConfigurationType" />
-    </history-entry>
-    <history-entry file="tests_in_dart_queue_test_dart - 2020.03.13 at 09h 03m 20s.xml">
-      <configuration name="tests in dart_queue_test.dart" configurationId="DartTestRunConfigurationType" />
-    </history-entry>
-    <history-entry file="tests_in_dart_queue_test_dart - 2020.03.13 at 09h 03m 35s.xml">
-      <configuration name="tests in dart_queue_test.dart" configurationId="DartTestRunConfigurationType" />
-    </history-entry>
-    <history-entry file="tests_in_queue_test_dart - 2020.03.13 at 11h 09m 36s.xml">
-      <configuration name="tests in queue_test.dart" configurationId="DartTestRunConfigurationType" />
-    </history-entry>
-    <history-entry file="tests_in_queue_test_dart - 2020.03.13 at 11h 09m 59s.xml">
-      <configuration name="tests in queue_test.dart" configurationId="DartTestRunConfigurationType" />
-    </history-entry>
-    <history-entry file="tests_in_queue_test_dart - 2020.03.13 at 11h 10m 17s.xml">
-      <configuration name="tests in queue_test.dart" configurationId="DartTestRunConfigurationType" />
-    </history-entry>
-  </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
           </value>
         </entry>
       </map>
     </option>
+  </component>
+  <component name="WindowStateProjectService">
+    <state width="1750" height="373" key="GridCell.Tab.0.bottom" timestamp="1599101543625">
+      <screen x="0" y="23" width="1792" height="1097" />
+    </state>
+    <state width="1750" height="373" key="GridCell.Tab.0.bottom/-1080.-814.1080.1897/0.23.1792.1097@0.23.1792.1097" timestamp="1599101543625" />
+    <state width="1750" height="373" key="GridCell.Tab.0.center" timestamp="1599101543624">
+      <screen x="0" y="23" width="1792" height="1097" />
+    </state>
+    <state width="1750" height="373" key="GridCell.Tab.0.center/-1080.-814.1080.1897/0.23.1792.1097@0.23.1792.1097" timestamp="1599101543624" />
+    <state width="1750" height="373" key="GridCell.Tab.0.left" timestamp="1599101543624">
+      <screen x="0" y="23" width="1792" height="1097" />
+    </state>
+    <state width="1750" height="373" key="GridCell.Tab.0.left/-1080.-814.1080.1897/0.23.1792.1097@0.23.1792.1097" timestamp="1599101543624" />
+    <state width="1750" height="373" key="GridCell.Tab.0.right" timestamp="1599101543624">
+      <screen x="0" y="23" width="1792" height="1097" />
+    </state>
+    <state width="1750" height="373" key="GridCell.Tab.0.right/-1080.-814.1080.1897/0.23.1792.1097@0.23.1792.1097" timestamp="1599101543624" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="Dart">
+          <url>file://$PROJECT_DIR$/test/queue_test.dart</url>
+          <line>117</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
