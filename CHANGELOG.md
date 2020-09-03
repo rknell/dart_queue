@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.2
+
+- Parallel performance improvements
+
 ## 2.0.1
 
 - Adding parallel option

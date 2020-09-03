@@ -32,12 +32,13 @@ class Queue {
   /// The number of items to process at one time
   final int parallel;
 
-  int _parallelOverqueueComplete = 0;
+  int _lastProcessId = 0;
 
-  bool _isProcessing = false;
   bool _isCancelled = false;
 
   bool get isCancelled => _isCancelled;
+
+  Set<int> activeItems = {};
 
   /// Cancels the queue.
   ///
@@ -70,37 +71,23 @@ class Queue {
   Completer parallelCycleFuture;
 
   Future<void> _process() async {
-    if (!_isProcessing) {
-      _isProcessing = true;
-      final currentCycle = List.of(_nextCycle);
-      _nextCycle.clear();
-
-      _parallelOverqueueComplete = 0;
-      parallelCycleFuture = Completer();
-      for (var i = 0; i < parallel; i++) {
-        _queueUpNext(currentCycle);
-      }
-      await parallelCycleFuture.future;
-
-      _isProcessing = false;
-      if (!_isCancelled && _nextCycle.isNotEmpty) {
-        await Future.microtask(() {}); // yield to prevent stack overflow
-        unawaited(_process());
-      }
+    if(activeItems.length < parallel){
+      _queueUpNext();
     }
   }
 
-  _queueUpNext(List<_QueuedFuture<dynamic>> currentCycle) {
-    if (currentCycle.isNotEmpty) {
-      final item = currentCycle.first;
-      currentCycle.remove(item);
-      item.onComplete = () => _queueUpNext(currentCycle);
+  void _queueUpNext() {
+    if (_nextCycle.isNotEmpty) {
+      var processId = _lastProcessId;
+      activeItems.add(processId);
+      _lastProcessId++;
+      final item = _nextCycle.first;
+      _nextCycle.remove(item);
+      item.onComplete = () {
+        _queueUpNext();
+        activeItems.remove(processId);
+      };
       unawaited(item.execute());
-    } else {
-      _parallelOverqueueComplete++;
-      if(_parallelOverqueueComplete == parallel){
-        parallelCycleFuture.complete();
-      }
     }
   }
 }

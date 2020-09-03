@@ -89,10 +89,31 @@ void main() {
       final queueParallel = Queue(parallel: 3);
 
       await Future.wait([
-        /// Because it runs in cycles, the first will wait for 100ms if you don't have a future first.
         queueParallel.add(() async {
-          await Future.delayed(const Duration(milliseconds: 1));
-        }),
+          await Future.delayed(const Duration(milliseconds: 100));
+          return "result 1";
+        }).then((result) => results.add(result)),
+        queueParallel.add(() async {
+          await Future.delayed(const Duration(milliseconds: 50));
+          return "result 2";
+        }).then((result) => results.add(result)),
+        queueParallel.add(() async {
+          await Future.delayed(const Duration(milliseconds: 10));
+          return "result 3";
+        }).then((result) => results.add(result)),
+        queueParallel.add(() async {
+          await Future.delayed(const Duration(milliseconds: 10));
+          return "result 4";
+        }).then((result) => results.add(result)),
+        queueParallel.add(() async {
+          await Future.delayed(const Duration(milliseconds: 50));
+          return "result 5";
+        }).then((result) => results.add(result))
+      ]);
+
+      await Future.delayed(Duration(seconds: 1));
+
+      await Future.wait([
         queueParallel.add(() async {
           await Future.delayed(const Duration(milliseconds: 100));
           return "result 1";
@@ -120,6 +141,12 @@ void main() {
       expect(results[2], "result 2");
       expect(results[3], "result 5");
       expect(results[4], "result 1");
+
+      expect(results[5], "result 3");
+      expect(results[6], "result 4");
+      expect(results[7], "result 2");
+      expect(results[8], "result 5");
+      expect(results[9], "result 1");
     });
   });
 

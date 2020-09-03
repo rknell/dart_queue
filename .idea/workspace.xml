@@ -2,7 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2e3968a3-4508-4a84-84af-4732bef903aa" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CHANGELOG.md" beforeDir="false" afterPath="$PROJECT_DIR$/CHANGELOG.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/dart_queue_base.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/dart_queue_base.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/queue_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/queue_test.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,7 +42,7 @@
     <property name="settings.editor.selected.configurable" value="AndroidSdkUpdater" />
     <property name="show.migrate.to.gradle.popup" value="false" />
   </component>
-  <component name="RunManager" selected="Dart Test.it should run in parallel in queue_test.dart">
+  <component name="RunManager" selected="Dart Test.Run Tests">
     <configuration default="true" type="Applet">
       <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
       <method v="2">
@@ -139,29 +143,29 @@
     </option>
   </component>
   <component name="WindowStateProjectService">
-    <state width="1750" height="303" key="GridCell.Tab.0.bottom" timestamp="1599101631514">
+    <state width="1750" height="303" key="GridCell.Tab.0.bottom" timestamp="1599110242156">
       <screen x="0" y="23" width="1792" height="1097" />
     </state>
-    <state width="1750" height="303" key="GridCell.Tab.0.bottom/-1080.-814.1080.1897/0.23.1792.1097@0.23.1792.1097" timestamp="1599101631514" />
-    <state width="1750" height="303" key="GridCell.Tab.0.center" timestamp="1599101631513">
+    <state width="1750" height="303" key="GridCell.Tab.0.bottom/-1080.-814.1080.1897/0.23.1792.1097@0.23.1792.1097" timestamp="1599110242156" />
+    <state width="1750" height="303" key="GridCell.Tab.0.center" timestamp="1599110242155">
       <screen x="0" y="23" width="1792" height="1097" />
     </state>
-    <state width="1750" height="303" key="GridCell.Tab.0.center/-1080.-814.1080.1897/0.23.1792.1097@0.23.1792.1097" timestamp="1599101631513" />
-    <state width="1750" height="303" key="GridCell.Tab.0.left" timestamp="1599101631513">
+    <state width="1750" height="303" key="GridCell.Tab.0.center/-1080.-814.1080.1897/0.23.1792.1097@0.23.1792.1097" timestamp="1599110242155" />
+    <state width="1750" height="303" key="GridCell.Tab.0.left" timestamp="1599110242155">
       <screen x="0" y="23" width="1792" height="1097" />
     </state>
-    <state width="1750" height="303" key="GridCell.Tab.0.left/-1080.-814.1080.1897/0.23.1792.1097@0.23.1792.1097" timestamp="1599101631513" />
-    <state width="1750" height="303" key="GridCell.Tab.0.right" timestamp="1599101631514">
+    <state width="1750" height="303" key="GridCell.Tab.0.left/-1080.-814.1080.1897/0.23.1792.1097@0.23.1792.1097" timestamp="1599110242155" />
+    <state width="1750" height="303" key="GridCell.Tab.0.right" timestamp="1599110242156">
       <screen x="0" y="23" width="1792" height="1097" />
     </state>
-    <state width="1750" height="303" key="GridCell.Tab.0.right/-1080.-814.1080.1897/0.23.1792.1097@0.23.1792.1097" timestamp="1599101631514" />
+    <state width="1750" height="303" key="GridCell.Tab.0.right/-1080.-814.1080.1897/0.23.1792.1097@0.23.1792.1097" timestamp="1599110242156" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="Dart">
           <url>file://$PROJECT_DIR$/test/queue_test.dart</url>
-          <line>117</line>
+          <line>138</line>
           <option name="timeStamp" value="3" />
         </line-breakpoint>
       </breakpoints>
