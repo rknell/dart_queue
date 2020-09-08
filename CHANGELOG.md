@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.3
+
+- Fixing delay not being respected
+
 ## 2.0.2
 
 - Parallel performance improvements

@@ -83,7 +83,10 @@ class Queue {
       _lastProcessId++;
       final item = _nextCycle.first;
       _nextCycle.remove(item);
-      item.onComplete = () {
+      item.onComplete = () async {
+        if(delay != null){
+          await Future.delayed(delay);
+        }
         _queueUpNext();
         activeItems.remove(processId);
       };
