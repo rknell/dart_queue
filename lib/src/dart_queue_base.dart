@@ -31,13 +31,13 @@ class Queue {
 
   /// The number of items to process at one time
   final int parallel;
-
   int _lastProcessId = 0;
-
   bool _isCancelled = false;
-
   bool get isCancelled => _isCancelled;
+  final _remainingItemsController = StreamController<int>();
+  Stream<int> get remainingItems => _remainingItemsController.stream.asBroadcastStream();
 
+  @Deprecated("v3 - listen to the [remainingItems] stream to listen to queue status")
   Set<int> activeItems = {};
 
   /// Cancels the queue.
@@ -49,6 +49,7 @@ class Queue {
 
   /// Alias for [cancel].
   void dispose() {
+    _remainingItemsController.close();
     cancel();
   }
 
@@ -70,6 +71,13 @@ class Queue {
 
   Completer parallelCycleFuture;
 
+  /// Handles the number of parallel tasks firing at any one time
+  ///
+  /// It does this by checking how many streams are running by querying active
+  /// items, and then if it has less than the number of parallel operations fire off another stream.
+  ///
+  /// When each item completes it will only fire up one othe process
+  ///
   Future<void> _process() async {
     if(activeItems.length < parallel){
       _queueUpNext();
@@ -77,18 +85,19 @@ class Queue {
   }
 
   void _queueUpNext() {
-    if (_nextCycle.isNotEmpty) {
+    if (_nextCycle.isNotEmpty && !isCancelled) {
       var processId = _lastProcessId;
       activeItems.add(processId);
       _lastProcessId++;
       final item = _nextCycle.first;
       _nextCycle.remove(item);
       item.onComplete = () async {
+        activeItems.remove(processId);
+        _remainingItemsController.sink.add(activeItems.length);
         if(delay != null){
           await Future.delayed(delay);
         }
         _queueUpNext();
-        activeItems.remove(processId);
       };
       unawaited(item.execute());
     }
