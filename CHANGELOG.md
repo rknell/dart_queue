@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.5
+
+- Fixing incorrect reporting of items in queue
+
 ## 2.0.4
 
 - Fixing cancelled not being respected when queueing up new items

@@ -93,7 +93,7 @@ class Queue {
       _nextCycle.remove(item);
       item.onComplete = () async {
         activeItems.remove(processId);
-        _remainingItemsController.sink.add(activeItems.length);
+        _remainingItemsController.sink.add(_nextCycle.length);
         if(delay != null){
           await Future.delayed(delay);
         }
