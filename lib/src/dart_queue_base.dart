@@ -30,7 +30,9 @@ class Queue {
   final Duration delay;
 
   /// The number of items to process at one time
-  final int parallel;
+  ///
+  /// Can be edited mid processing
+  int parallel;
   int _lastProcessId = 0;
   bool _isCancelled = false;
   bool get isCancelled => _isCancelled;
@@ -68,8 +70,6 @@ class Queue {
     unawaited(_process());
     return completer.future;
   }
-
-  Completer parallelCycleFuture;
 
   /// Handles the number of parallel tasks firing at any one time
   ///

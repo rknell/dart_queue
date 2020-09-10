@@ -3,8 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="2e3968a3-4508-4a84-84af-4732bef903aa" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CHANGELOG.md" beforeDir="false" afterPath="$PROJECT_DIR$/CHANGELOG.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/src/dart_queue_base.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/dart_queue_base.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -141,28 +141,28 @@
     </option>
   </component>
   <component name="WindowStateProjectService">
-    <state width="1750" height="303" key="GridCell.Tab.0.bottom" timestamp="1599602744546">
+    <state width="1750" height="303" key="GridCell.Tab.0.bottom" timestamp="1599715601996">
       <screen x="0" y="23" width="1792" height="1097" />
     </state>
-    <state width="1750" height="303" key="GridCell.Tab.0.bottom/-1080.-814.1080.1897/0.23.1792.1097@0.23.1792.1097" timestamp="1599545531713" />
+    <state width="1750" height="303" key="GridCell.Tab.0.bottom/-1080.-814.1080.1897/0.23.1792.1097@0.23.1792.1097" timestamp="1599715601996" />
     <state width="1750" height="373" key="GridCell.Tab.0.bottom/0.23.1536.937@0.23.1536.937" timestamp="1599126422948" />
     <state width="1750" height="303" key="GridCell.Tab.0.bottom/1792.23.1920.1057/0.23.1792.1097@0.23.1792.1097" timestamp="1599602744546" />
-    <state width="1750" height="303" key="GridCell.Tab.0.center" timestamp="1599602744545">
+    <state width="1750" height="303" key="GridCell.Tab.0.center" timestamp="1599715601995">
       <screen x="0" y="23" width="1792" height="1097" />
     </state>
-    <state width="1750" height="303" key="GridCell.Tab.0.center/-1080.-814.1080.1897/0.23.1792.1097@0.23.1792.1097" timestamp="1599545531713" />
+    <state width="1750" height="303" key="GridCell.Tab.0.center/-1080.-814.1080.1897/0.23.1792.1097@0.23.1792.1097" timestamp="1599715601995" />
     <state width="1750" height="373" key="GridCell.Tab.0.center/0.23.1536.937@0.23.1536.937" timestamp="1599126422948" />
     <state width="1750" height="303" key="GridCell.Tab.0.center/1792.23.1920.1057/0.23.1792.1097@0.23.1792.1097" timestamp="1599602744545" />
-    <state width="1750" height="303" key="GridCell.Tab.0.left" timestamp="1599602744545">
+    <state width="1750" height="303" key="GridCell.Tab.0.left" timestamp="1599715601994">
       <screen x="0" y="23" width="1792" height="1097" />
     </state>
-    <state width="1750" height="303" key="GridCell.Tab.0.left/-1080.-814.1080.1897/0.23.1792.1097@0.23.1792.1097" timestamp="1599545531712" />
+    <state width="1750" height="303" key="GridCell.Tab.0.left/-1080.-814.1080.1897/0.23.1792.1097@0.23.1792.1097" timestamp="1599715601994" />
     <state width="1750" height="373" key="GridCell.Tab.0.left/0.23.1536.937@0.23.1536.937" timestamp="1599126422948" />
     <state width="1750" height="303" key="GridCell.Tab.0.left/1792.23.1920.1057/0.23.1792.1097@0.23.1792.1097" timestamp="1599602744545" />
-    <state width="1750" height="303" key="GridCell.Tab.0.right" timestamp="1599602744545">
+    <state width="1750" height="303" key="GridCell.Tab.0.right" timestamp="1599715601995">
       <screen x="0" y="23" width="1792" height="1097" />
     </state>
-    <state width="1750" height="303" key="GridCell.Tab.0.right/-1080.-814.1080.1897/0.23.1792.1097@0.23.1792.1097" timestamp="1599545531713" />
+    <state width="1750" height="303" key="GridCell.Tab.0.right/-1080.-814.1080.1897/0.23.1792.1097@0.23.1792.1097" timestamp="1599715601995" />
     <state width="1750" height="373" key="GridCell.Tab.0.right/0.23.1536.937@0.23.1536.937" timestamp="1599126422948" />
     <state width="1750" height="303" key="GridCell.Tab.0.right/1792.23.1920.1057/0.23.1792.1097@0.23.1792.1097" timestamp="1599602744545" />
   </component>
