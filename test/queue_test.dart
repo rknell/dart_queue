@@ -1,7 +1,6 @@
 import 'package:queue/queue.dart';
 import 'package:test/test.dart';
 
-
 void main() {
   group('Queue', () {
     Queue queue;
@@ -149,6 +148,4 @@ void main() {
       expect(results[9], "result 1");
     });
   });
-
-
 }

@@ -37,9 +37,11 @@ class Queue {
   bool _isCancelled = false;
   bool get isCancelled => _isCancelled;
   final _remainingItemsController = StreamController<int>();
-  Stream<int> get remainingItems => _remainingItemsController.stream.asBroadcastStream();
+  Stream<int> get remainingItems =>
+      _remainingItemsController.stream.asBroadcastStream();
 
-  @Deprecated("v3 - listen to the [remainingItems] stream to listen to queue status")
+  @Deprecated(
+      "v3 - listen to the [remainingItems] stream to listen to queue status")
   Set<int> activeItems = {};
 
   /// Cancels the queue.
@@ -79,7 +81,7 @@ class Queue {
   /// When each item completes it will only fire up one othe process
   ///
   Future<void> _process() async {
-    if(activeItems.length < parallel){
+    if (activeItems.length < parallel) {
       _queueUpNext();
     }
   }
@@ -94,7 +96,7 @@ class Queue {
       item.onComplete = () async {
         activeItems.remove(processId);
         _remainingItemsController.sink.add(_nextCycle.length);
-        if(delay != null){
+        if (delay != null) {
           await Future.delayed(delay);
         }
         _queueUpNext();
