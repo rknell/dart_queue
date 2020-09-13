@@ -11,7 +11,21 @@ Alternative use cases could be spidering a website, downloading a number of file
 
 ## Usage
 
-A simple usage example:
+The most simple example:
+```dart
+import 'package:dart_queue/dart_queue.dart';
+
+main() async {
+  final queue = Queue();
+
+  //Queue up a future and await its result
+  final result = await queue.add(()=>Future.delayed(Duration(milliseconds: 10)));
+
+  //Thats it!
+}
+```
+
+A proof of concept:
 
 ```dart
 import 'package:dart_queue/dart_queue.dart';
@@ -34,3 +48,45 @@ main() async {
   result == "Future Complete"; //true
 }
 ```
+
+#### Parallel processing
+This doesn't work in batches and will fire the next item as soon as as there is space in the queue
+Use [Queue(delayed: ...)] to specify a delay before firing the next item  
+
+```dart
+import 'package:dart_queue/dart_queue.dart';
+
+main() async {
+  final queue = Queue(parallel: 2);
+
+  //Queue up a future and await its result
+  final result1 = await queue.add(()=>Future.delayed(Duration(milliseconds: 10)));
+  final result2 = await queue.add(()=>Future.delayed(Duration(milliseconds: 10)));
+
+  //Thats it!
+}
+```
+
+#### Rate limiting
+You can specify a delay before the next item is fired as per the following example:
+
+```dart
+import 'package:dart_queue/dart_queue.dart';
+
+main() async {
+  final queue = Queue(delay: Duration(milliseconds: 500)); // Set the delay here
+
+  //Queue up a future and await its result
+  final result1 = await queue.add(()=>Future.delayed(Duration(milliseconds: 10)));
+  final result2 = await queue.add(()=>Future.delayed(Duration(milliseconds: 10)));
+
+  //Thats it!
+}
+```
+
+## Contributing
+
+Pull requests are welcome. There is a shell script `ci_checks.sh` that will run the checks to get 
+past CI and also format the code before committing. If that all passes your PR will likely be accepted.
+
+Please write tests to cover your new feature.
