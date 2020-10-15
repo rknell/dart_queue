@@ -111,7 +111,7 @@ void main() {
         }).then((result) => results.add(result))
       ]);
 
-      await Future.delayed(Duration(seconds: 1));
+      await Future.delayed(const Duration(seconds: 1));
 
       unawaited(queueParallel.add(() async {
         await Future.delayed(const Duration(milliseconds: 100));

@@ -106,7 +106,7 @@ class Queue {
     if (_nextCycle.isNotEmpty &&
         !isCancelled &&
         activeItems.length <= parallel) {
-      var processId = _lastProcessId;
+      final processId = _lastProcessId;
       activeItems.add(processId);
       _lastProcessId++;
       final item = _nextCycle.first;
