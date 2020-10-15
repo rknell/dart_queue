@@ -67,6 +67,23 @@ main() async {
 }
 ```
 
+#### On complete
+```dart
+import 'package:dart_queue/dart_queue.dart';
+
+main() async {
+  final queue = Queue(parallel: 2);
+
+  //Queue up a couple of futures
+  queue.add(()=>Future.delayed(Duration(milliseconds: 10)));
+  queue.add(()=>Future.delayed(Duration(milliseconds: 10)));
+
+
+  // Will only resolve when all the queue items have resolved.
+  await queue.onComplete;
+}
+```
+
 #### Rate limiting
 You can specify a delay before the next item is fired as per the following example:
 

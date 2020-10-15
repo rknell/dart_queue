@@ -1,4 +1,5 @@
 import 'package:queue/queue.dart';
+import 'package:queue/src/dart_queue_base.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -112,28 +113,28 @@ void main() {
 
       await Future.delayed(Duration(seconds: 1));
 
-      await Future.wait([
-        queueParallel.add(() async {
-          await Future.delayed(const Duration(milliseconds: 100));
-          return "result 1";
-        }).then((result) => results.add(result)),
-        queueParallel.add(() async {
-          await Future.delayed(const Duration(milliseconds: 50));
-          return "result 2";
-        }).then((result) => results.add(result)),
-        queueParallel.add(() async {
-          await Future.delayed(const Duration(milliseconds: 10));
-          return "result 3";
-        }).then((result) => results.add(result)),
-        queueParallel.add(() async {
-          await Future.delayed(const Duration(milliseconds: 10));
-          return "result 4";
-        }).then((result) => results.add(result)),
-        queueParallel.add(() async {
-          await Future.delayed(const Duration(milliseconds: 50));
-          return "result 5";
-        }).then((result) => results.add(result))
-      ]);
+      unawaited(queueParallel.add(() async {
+        await Future.delayed(const Duration(milliseconds: 100));
+        return "result 1";
+      }).then((result) => results.add(result)));
+      unawaited(queueParallel.add(() async {
+        await Future.delayed(const Duration(milliseconds: 50));
+        return "result 2";
+      }).then((result) => results.add(result)));
+      unawaited(queueParallel.add(() async {
+        await Future.delayed(const Duration(milliseconds: 10));
+        return "result 3";
+      }).then((result) => results.add(result)));
+      unawaited(queueParallel.add(() async {
+        await Future.delayed(const Duration(milliseconds: 10));
+        return "result 4";
+      }).then((result) => results.add(result)));
+      unawaited(queueParallel.add(() async {
+        await Future.delayed(const Duration(milliseconds: 50));
+        return "result 5";
+      }).then((result) => results.add(result)));
+
+      await queueParallel.onComplete;
 
       expect(results[0], "result 3");
       expect(results[1], "result 4");
@@ -146,6 +147,32 @@ void main() {
       expect(results[7], "result 2");
       expect(results[8], "result 5");
       expect(results[9], "result 1");
+    });
+
+    test('it should handle an error correctly (also testing oncomplete)',
+        () async {
+      int hitError = 0;
+      final errorQueue = Queue(parallel: 10);
+      for (var i = 0; i < 100; i++) {
+        unawaited(errorQueue.add(() async {
+          await Future.delayed(const Duration(milliseconds: 100));
+          throw Exception("test exception");
+        }).catchError((err) {
+          hitError++;
+          expect(err.toString(), "Exception: test exception");
+        }));
+      }
+      try {
+        await errorQueue.add(() {
+          Future.delayed(const Duration(milliseconds: 10));
+          throw Exception("test exception");
+        });
+      } catch (e) {
+        hitError++;
+      }
+      await errorQueue.onComplete;
+      expect(errorQueue.activeItems.length, 0);
+      expect(hitError, 101);
     });
   });
 }

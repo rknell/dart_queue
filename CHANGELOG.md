@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.6
+
+- Adding onComplete getter
+
 ## 2.0.5
 
 - Fixing incorrect reporting of items in queue

@@ -14,9 +14,10 @@ class _QueuedFuture<T> {
       completer.complete(result);
       //Make sure not to execute the next command until this future has completed
       await Future.microtask(() {});
-      if (onComplete != null) onComplete();
     } catch (e) {
       completer.completeError(e);
+    } finally {
+      if (onComplete != null) onComplete();
     }
   }
 }
@@ -35,10 +36,24 @@ class Queue {
   int parallel;
   int _lastProcessId = 0;
   bool _isCancelled = false;
+
   bool get isCancelled => _isCancelled;
   final _remainingItemsController = StreamController<int>();
+
   Stream<int> get remainingItems =>
       _remainingItemsController.stream.asBroadcastStream();
+
+  final List<Completer<void>> _completeListeners = [];
+
+  /// Resolve when all items are complete
+  ///
+  /// Returns a future that will resolve when all items in the queue have
+  /// finished processing
+  Future get onComplete {
+    final completer = Completer();
+    _completeListeners.add(completer);
+    return completer.future;
+  }
 
   @Deprecated(
       "v3 - listen to the [remainingItems] stream to listen to queue status")
@@ -69,6 +84,7 @@ class Queue {
     if (isCancelled) throw Exception('Queue is cancelled');
     final completer = Completer<T>();
     _nextCycle.add(_QueuedFuture<T>(closure, completer));
+    _remainingItemsController.sink.add(_nextCycle.length);
     unawaited(_process());
     return completer.future;
   }
@@ -87,7 +103,9 @@ class Queue {
   }
 
   void _queueUpNext() {
-    if (_nextCycle.isNotEmpty && !isCancelled) {
+    if (_nextCycle.isNotEmpty &&
+        !isCancelled &&
+        activeItems.length <= parallel) {
       var processId = _lastProcessId;
       activeItems.add(processId);
       _lastProcessId++;
@@ -95,13 +113,21 @@ class Queue {
       _nextCycle.remove(item);
       item.onComplete = () async {
         activeItems.remove(processId);
-        _remainingItemsController.sink.add(_nextCycle.length);
         if (delay != null) {
           await Future.delayed(delay);
         }
+        _remainingItemsController.sink.add(_nextCycle.length);
         _queueUpNext();
       };
       unawaited(item.execute());
+    } else if (activeItems.isEmpty && _nextCycle.isEmpty) {
+      //Complete
+      for (final completer in _completeListeners) {
+        if (completer.isCompleted != true) {
+          completer.complete();
+        }
+      }
+      _completeListeners.clear();
     }
   }
 }
