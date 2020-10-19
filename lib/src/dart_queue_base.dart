@@ -76,7 +76,7 @@ class Queue {
   ///
   /// Subsquent calls to [add] will throw.
   void cancel() {
-    for (var item in _nextCycle) {
+    for (final item in _nextCycle) {
       item.completer.completeError(QueueCancelledException());
     }
     _nextCycle.removeWhere((item) => item.completer.isCompleted);
@@ -123,7 +123,7 @@ class Queue {
     }
   }
 
-  _updateRemainingItems() {
+  void _updateRemainingItems() {
     _remainingItemsController?.sink
         ?.add(_nextCycle.length + activeItems.length);
   }

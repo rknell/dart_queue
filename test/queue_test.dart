@@ -88,7 +88,7 @@ void main() {
 
       final queueParallel = Queue(parallel: 3);
 
-      List<int> remainingItemsResults = [];
+      final List<int> remainingItemsResults = [];
       final remainingItemsStream = queueParallel.remainingItems
           .listen((items) => remainingItemsResults.add(items));
 
