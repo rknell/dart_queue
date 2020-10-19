@@ -101,6 +101,43 @@ main() async {
 }
 ```
 
+#### Cancel
+
+If you need to stop a queue from processing call Queue.cancel();
+
+This will cancel the remaining items in the queue by throwing a `QueueCancelledException`.
+A cancelled queue is "dead" and should be recreated. If you try adding items to the queue after you
+call cancel, it will throw a `QueueCancelledException`.
+
+If you have no reason to listen to the results of the items, simply call dispose.
+
+If you want to wait until all the items which are inflight complete, call Queue.onComplete first.
+
+#### Disposing
+If you need to dispose of the queue object (best practice in flutter any any time the queue object will close)
+simply call queue.dispose();
+
+This is necessary to close the `Queue.remainingItems` controller.
+
+#### Reporting
+If you want to query how many items are outstanding in the queue, listen to the Queue.remainingItems stream.
+
+```dart
+import 'package:dart_queue/dart_queue.dart';
+final queue = Queue();
+
+final remainingItemsStream = queue.remainingItems.listen((numberOfItems)=>print(numberOfItems));
+
+//Queue up a couple of futures
+queue.add(()=>Future.delayed(Duration(milliseconds: 10)));
+queue.add(()=>Future.delayed(Duration(milliseconds: 10)));
+
+// Will only resolve when all the queue items have resolved.
+await queue.onComplete;
+
+remainingItemsStream.close();
+```
+
 ## Contributing
 
 Pull requests are welcome. There is a shell script `ci_checks.sh` that will run the checks to get 

@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.0.7
+
+- Potentially breaking: Updated remainingItems stream to include all items that are both waiting to start and in progress (previously it was just waiting to start)
+- Updating remainingItems stream when adding an item as well as upon completion
+- Adding a timeout. This will not cancel the future but will fire off new items in the queue if the future reaches its timeout.
+- Remaining items stream is now lazily created to prevent memory leaks if you aren't using it.
+
 ## 2.0.6
 
 - Adding onComplete getter

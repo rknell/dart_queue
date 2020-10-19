@@ -88,6 +88,10 @@ void main() {
 
       final queueParallel = Queue(parallel: 3);
 
+      List<int> remainingItemsResults = [];
+      final remainingItemsStream = queueParallel.remainingItems
+          .listen((items) => remainingItemsResults.add(items));
+
       await Future.wait([
         queueParallel.add(() async {
           await Future.delayed(const Duration(milliseconds: 100));
@@ -147,6 +151,9 @@ void main() {
       expect(results[7], "result 2");
       expect(results[8], "result 5");
       expect(results[9], "result 1");
+
+      await remainingItemsStream.cancel();
+      expect(remainingItemsResults.isNotEmpty, true);
     });
 
     test('it should handle an error correctly (also testing oncomplete)',
@@ -174,5 +181,56 @@ void main() {
       expect(errorQueue.activeItems.length, 0);
       expect(hitError, 101);
     });
+  });
+
+  test('should cancel', () async {
+    final cancelQueue = Queue();
+    final results = <String>[];
+    final errors = <Exception>[];
+
+    unawaited(Future.wait([
+      cancelQueue
+          .add(() async {
+            await Future.delayed(const Duration(milliseconds: 10));
+            return "result 1";
+          })
+          .then((result) => results.add(result))
+          .catchError((err) => errors.add(err)),
+      cancelQueue
+          .add(() async {
+            await Future.delayed(const Duration(milliseconds: 10));
+            return "result 2";
+          })
+          .then((result) => results.add(result))
+          .catchError((err) => errors.add(err)),
+      cancelQueue
+          .add(() async {
+            await Future.delayed(const Duration(milliseconds: 10));
+            return "result 3";
+          })
+          .then((result) => results.add(result))
+          .catchError((err) => errors.add(err)),
+      cancelQueue
+          .add(() async {
+            await Future.delayed(const Duration(milliseconds: 10));
+            return "result 4";
+          })
+          .then((result) => results.add(result))
+          .catchError((err) => errors.add(err)),
+      cancelQueue
+          .add(() async {
+            await Future.delayed(const Duration(milliseconds: 10));
+            return "result 5";
+          })
+          .then((result) => results.add(result))
+          .catchError((err) => errors.add(err))
+    ]));
+
+    await Future.delayed(const Duration(milliseconds: 25));
+    cancelQueue.cancel();
+    await cancelQueue.onComplete;
+    expect(results.length, 3);
+    expect(errors.length, 2);
+    expect(errors.first is QueueCancelledException, true);
   });
 }

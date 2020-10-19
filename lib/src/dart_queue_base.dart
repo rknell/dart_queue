@@ -3,14 +3,20 @@ import 'dart:async';
 class _QueuedFuture<T> {
   final Completer completer;
   final Future<T> Function() closure;
+  final Duration timeout;
 
-  _QueuedFuture(this.closure, this.completer, {this.onComplete});
+  _QueuedFuture(this.closure, this.completer, this.timeout, {this.onComplete});
 
   Function onComplete;
 
   Future<void> execute() async {
     try {
-      final result = await closure();
+      T result;
+      if (timeout == null) {
+        result = await closure();
+      } else {
+        result = await closure().timeout(timeout);
+      }
       completer.complete(result);
       //Make sure not to execute the next command until this future has completed
       await Future.microtask(() {});
@@ -30,6 +36,9 @@ class Queue {
   /// A delay to await between each future.
   final Duration delay;
 
+  /// A timeout before processing the next item in the queue
+  final Duration timeout;
+
   /// The number of items to process at one time
   ///
   /// Can be edited mid processing
@@ -38,10 +47,14 @@ class Queue {
   bool _isCancelled = false;
 
   bool get isCancelled => _isCancelled;
-  final _remainingItemsController = StreamController<int>();
+  StreamController<int> _remainingItemsController;
 
-  Stream<int> get remainingItems =>
-      _remainingItemsController.stream.asBroadcastStream();
+  Stream<int> get remainingItems {
+    // Lazily create the remaining items controller so if people aren't listening to the stream, it won't create any potential memory leaks.
+    // Probably not necessary, but hey, why not?
+    _remainingItemsController ??= StreamController<int>();
+    return _remainingItemsController.stream.asBroadcastStream();
+  }
 
   final List<Completer<void>> _completeListeners = [];
 
@@ -59,20 +72,28 @@ class Queue {
       "v3 - listen to the [remainingItems] stream to listen to queue status")
   Set<int> activeItems = {};
 
-  /// Cancels the queue.
+  /// Cancels the queue. Also cancels any unprocessed items throwing a [QueueCancelledException]
   ///
   /// Subsquent calls to [add] will throw.
   void cancel() {
+    for (var item in _nextCycle) {
+      item.completer.completeError(QueueCancelledException());
+    }
+    _nextCycle.removeWhere((item) => item.completer.isCompleted);
     _isCancelled = true;
   }
 
-  /// Alias for [cancel].
+  /// Dispose of the queue
+  ///
+  /// This will run the [cancel] function and close the remaining items stream
+  /// To gracefully exit the queue, waiting for items to complete first,
+  /// call `await [Queue.onComplete];` before disposing
   void dispose() {
     _remainingItemsController.close();
     cancel();
   }
 
-  Queue({this.delay, this.parallel = 1});
+  Queue({this.delay, this.parallel = 1, this.timeout});
 
   /// Adds the future-returning closure to the queue.
   ///
@@ -81,10 +102,10 @@ class Queue {
   ///
   /// Will throw an exception if the queue has been cancelled.
   Future<T> add<T>(Future<T> Function() closure) {
-    if (isCancelled) throw Exception('Queue is cancelled');
+    if (isCancelled) throw QueueCancelledException();
     final completer = Completer<T>();
-    _nextCycle.add(_QueuedFuture<T>(closure, completer));
-    _remainingItemsController.sink.add(_nextCycle.length);
+    _nextCycle.add(_QueuedFuture<T>(closure, completer, timeout));
+    _updateRemainingItems();
     unawaited(_process());
     return completer.future;
   }
@@ -102,21 +123,26 @@ class Queue {
     }
   }
 
+  _updateRemainingItems() {
+    _remainingItemsController?.sink
+        ?.add(_nextCycle.length + activeItems.length);
+  }
+
   void _queueUpNext() {
     if (_nextCycle.isNotEmpty &&
         !isCancelled &&
         activeItems.length <= parallel) {
       final processId = _lastProcessId;
       activeItems.add(processId);
-      _lastProcessId++;
       final item = _nextCycle.first;
+      _lastProcessId++;
       _nextCycle.remove(item);
       item.onComplete = () async {
         activeItems.remove(processId);
         if (delay != null) {
           await Future.delayed(delay);
         }
-        _remainingItemsController.sink.add(_nextCycle.length);
+        _updateRemainingItems();
         _queueUpNext();
       };
       unawaited(item.execute());
@@ -131,6 +157,8 @@ class Queue {
     }
   }
 }
+
+class QueueCancelledException implements Exception {}
 
 // Don't throw analysis error on unawaited future.
 void unawaited(Future<void> future) {}
