@@ -9,21 +9,28 @@ class _QueuedFuture<T> {
 
   Function onComplete;
 
+  bool _timedOut = false;
+
   Future<void> execute() async {
     try {
       T result;
-      if (timeout == null) {
-        result = await closure();
-      } else {
-        result = await closure().timeout(timeout);
+      Timer timoutTimer;
+
+      if (timeout != null) {
+        timoutTimer = Timer(timeout, () {
+          _timedOut = true;
+          if (onComplete != null) onComplete();
+        });
       }
+      result = await closure();
       completer.complete(result);
       //Make sure not to execute the next command until this future has completed
+      timoutTimer?.cancel();
       await Future.microtask(() {});
     } catch (e) {
       completer.completeError(e);
     } finally {
-      if (onComplete != null) onComplete();
+      if (onComplete != null && !_timedOut) onComplete();
     }
   }
 }

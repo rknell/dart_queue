@@ -233,4 +233,20 @@ void main() {
     expect(errors.length, 2);
     expect(errors.first is QueueCancelledException, true);
   });
+
+  test("timed out queue item still completes", () async {
+    final queue = Queue(timeout: const Duration(milliseconds: 10));
+
+    final resultOrder = [];
+
+    unawaited(queue.onComplete.then((_) => resultOrder.add("timedout")));
+    resultOrder.add(await queue.add(() async {
+      await Future.delayed(const Duration(seconds: 1));
+      return "test";
+    }));
+
+    expect(resultOrder.length, 2);
+    expect(resultOrder.first, "timedout");
+    expect(resultOrder[1], "test");
+  });
 }

@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.7+1
+
+- Fixing a bug where the timeout would not return later if the queue promise timed out.
+
 ## 2.0.7
 
 - Potentially breaking: Updated remainingItems stream to include all items that are both waiting to start and in progress (previously it was just waiting to start)
