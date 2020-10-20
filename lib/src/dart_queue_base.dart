@@ -96,7 +96,7 @@ class Queue {
   /// To gracefully exit the queue, waiting for items to complete first,
   /// call `await [Queue.onComplete];` before disposing
   void dispose() {
-    _remainingItemsController.close();
+    _remainingItemsController?.close();
     cancel();
   }
 

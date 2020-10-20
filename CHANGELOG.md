@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.7+2
+
+- Fixing bug where trying to cancel items stream and it doesn't exist
+
 ## 2.0.7+1
 
 - Fixing a bug where the timeout would not return later if the queue promise timed out.
