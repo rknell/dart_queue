@@ -134,8 +134,8 @@ queue.add(()=>Future.delayed(Duration(milliseconds: 10)));
 
 // Will only resolve when all the queue items have resolved.
 await queue.onComplete;
-
 remainingItemsStream.close();
+queue.dispose(); // Will clean up any resources in the queue if you are done with it.
 ```
 
 ## Contributing
