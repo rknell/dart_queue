@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.0.0-nullsafety.0
+
+- Initial null safe release
+
 ## 2.0.7+2
 
 - Fixing bug where trying to cancel items stream and it doesn't exist

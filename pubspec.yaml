@@ -1,16 +1,13 @@
 name: queue
 description: Queue up futures from multiple sources and await their return anywhere in your code.
-version: 2.0.7+2
+version: 3.0.0-nullsafety.0
 homepage: https://github.com/rknell/dart_queue
 repository: https://github.com/rknell/dart_queue
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
-
-#dependencies:
-#  path: ^1.6.0
+  sdk: ">=2.12.0-0 <3.0.0"
 
 dev_dependencies:
-  extra_pedantic: 1.1.1
-  pedantic:
-  test: ^1.6.0
+  extra_pedantic: 1.3.0
+  pedantic: 1.10.0
+  test: ^1.16.3

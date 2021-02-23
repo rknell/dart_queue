@@ -4,7 +4,7 @@ import 'package:test/test.dart';
 
 void main() {
   group('Queue', () {
-    Queue queue;
+    late Queue queue;
 
     setUp(() {
       queue = Queue();
@@ -51,7 +51,7 @@ void main() {
     });
 
     test('it should queue', () async {
-      final List<String> results = [];
+      final List<String?> results = [];
 
       await Future.wait([
         queue.add(() async {
@@ -84,7 +84,7 @@ void main() {
     });
 
     test('it should run in parallel', () async {
-      final List<String> results = [];
+      final List<String?> results = [];
 
       final queueParallel = Queue(parallel: 3);
 
@@ -185,7 +185,7 @@ void main() {
 
   test('should cancel', () async {
     final cancelQueue = Queue();
-    final results = <String>[];
+    final results = <String?>[];
     final errors = <Exception>[];
 
     unawaited(Future.wait([

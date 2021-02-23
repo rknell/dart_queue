@@ -2,35 +2,41 @@ import 'dart:async';
 
 class _QueuedFuture<T> {
   final Completer completer;
-  final Future<T> Function() closure;
-  final Duration timeout;
+  final Future<T?> Function() closure;
+  final Duration? timeout;
+  Function? onComplete;
 
   _QueuedFuture(this.closure, this.completer, this.timeout, {this.onComplete});
-
-  Function onComplete;
 
   bool _timedOut = false;
 
   Future<void> execute() async {
     try {
-      T result;
-      Timer timoutTimer;
+      T? result;
+      Timer? timoutTimer;
 
       if (timeout != null) {
-        timoutTimer = Timer(timeout, () {
+        timoutTimer = Timer(timeout!, () {
           _timedOut = true;
-          if (onComplete != null) onComplete();
+          if (onComplete != null) {
+            onComplete!();
+          }
         });
       }
       result = await closure();
-      completer.complete(result);
+      if (result != null) {
+        completer.complete(result);
+      } else {
+        completer.complete(null);
+      }
+
       //Make sure not to execute the next command until this future has completed
       timoutTimer?.cancel();
       await Future.microtask(() {});
     } catch (e) {
       completer.completeError(e);
     } finally {
-      if (onComplete != null && !_timedOut) onComplete();
+      if (onComplete != null && !_timedOut) onComplete!();
     }
   }
 }
@@ -41,10 +47,10 @@ class Queue {
   final List<_QueuedFuture> _nextCycle = [];
 
   /// A delay to await between each future.
-  final Duration delay;
+  final Duration? delay;
 
   /// A timeout before processing the next item in the queue
-  final Duration timeout;
+  final Duration? timeout;
 
   /// The number of items to process at one time
   ///
@@ -54,13 +60,13 @@ class Queue {
   bool _isCancelled = false;
 
   bool get isCancelled => _isCancelled;
-  StreamController<int> _remainingItemsController;
+  StreamController<int>? _remainingItemsController;
 
   Stream<int> get remainingItems {
     // Lazily create the remaining items controller so if people aren't listening to the stream, it won't create any potential memory leaks.
     // Probably not necessary, but hey, why not?
     _remainingItemsController ??= StreamController<int>();
-    return _remainingItemsController.stream.asBroadcastStream();
+    return _remainingItemsController!.stream.asBroadcastStream();
   }
 
   final List<Completer<void>> _completeListeners = [];
@@ -76,7 +82,7 @@ class Queue {
   }
 
   @Deprecated(
-      "v3 - listen to the [remainingItems] stream to listen to queue status")
+      "v4 - listen to the [remainingItems] stream to listen to queue status")
   Set<int> activeItems = {};
 
   /// Cancels the queue. Also cancels any unprocessed items throwing a [QueueCancelledException]
@@ -108,9 +114,9 @@ class Queue {
   /// by preceding closures have been awaited.
   ///
   /// Will throw an exception if the queue has been cancelled.
-  Future<T> add<T>(Future<T> Function() closure) {
+  Future<T?> add<T>(Future<T> Function() closure) {
     if (isCancelled) throw QueueCancelledException();
-    final completer = Completer<T>();
+    final completer = Completer<T?>();
     _nextCycle.add(_QueuedFuture<T>(closure, completer, timeout));
     _updateRemainingItems();
     unawaited(_process());
@@ -131,8 +137,7 @@ class Queue {
   }
 
   void _updateRemainingItems() {
-    _remainingItemsController?.sink
-        ?.add(_nextCycle.length + activeItems.length);
+    _remainingItemsController?.sink.add(_nextCycle.length + activeItems.length);
   }
 
   void _queueUpNext() {
@@ -147,7 +152,7 @@ class Queue {
       item.onComplete = () async {
         activeItems.remove(processId);
         if (delay != null) {
-          await Future.delayed(delay);
+          await Future.delayed(delay!);
         }
         _updateRemainingItems();
         _queueUpNext();
