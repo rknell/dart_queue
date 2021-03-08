@@ -185,15 +185,15 @@ void main() {
     test("it should honor priorities", () async {
       final result = <int>[];
       unawaited(queue.add(() async {
-        await Future.delayed(const Duration(milliseconds: 100));
+        await Future.delayed(const Duration(milliseconds: 10));
         result.add(1);
       }));
       unawaited(queue.add(() async {
-        await Future.delayed(const Duration(milliseconds: 100));
+        await Future.delayed(const Duration(milliseconds: 10));
         result.add(2);
       }));
       unawaited(queue.add(() async {
-        await Future.delayed(const Duration(milliseconds: 100));
+        await Future.delayed(const Duration(milliseconds: 10));
         result.add(3);
       }, needsPriority: true));
 
