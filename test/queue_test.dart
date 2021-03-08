@@ -212,21 +212,21 @@ void main() {
           .catchError((err) => errors.add(err)),
       cancelQueue
           .add(() async {
-            await Future.delayed(const Duration(milliseconds: 10));
+            await Future.delayed(const Duration(milliseconds: 20));
             return "result 4";
           })
           .then((result) => results.add(result))
           .catchError((err) => errors.add(err)),
       cancelQueue
           .add(() async {
-            await Future.delayed(const Duration(milliseconds: 10));
+            await Future.delayed(const Duration(milliseconds: 20));
             return "result 5";
           })
           .then((result) => results.add(result))
           .catchError((err) => errors.add(err))
     ]));
 
-    await Future.delayed(const Duration(milliseconds: 25));
+    await Future.delayed(const Duration(milliseconds: 35));
     cancelQueue.cancel();
     await cancelQueue.onComplete;
     expect(results.length, 3);
