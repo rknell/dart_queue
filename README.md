@@ -17,7 +17,7 @@ https://pub.dev/packages/alfred
 
 The most simple example:
 ```dart
-import 'package:dart_queue/dart_queue.dart';
+import 'package:queue/queue.dart';
 
 main() async {
   final queue = Queue();
@@ -32,22 +32,22 @@ main() async {
 A proof of concept:
 
 ```dart
-import 'package:dart_queue/dart_queue.dart';
+import 'package:queue/queue.dart';
 
 main() async {
   //Create the queue container
   final Queue queue = Queue(delay: Duration(milliseconds: 10));
-  
+
   //Add items to the queue asyncroniously
   queue.add(()=>Future.delayed(Duration(milliseconds: 100)));
   queue.add(()=>Future.delayed(Duration(milliseconds: 10)));
-  
+
   //Get a result from the future in line with await
   final result = await queue.add(() async {
     await Future.delayed(Duration(milliseconds: 1));
     return "Future Complete";
   });
-  
+
   //100, 10, 1 will reslove in that order.
   result == "Future Complete"; //true
 }
@@ -55,10 +55,10 @@ main() async {
 
 #### Parallel processing
 This doesn't work in batches and will fire the next item as soon as as there is space in the queue
-Use [Queue(delayed: ...)] to specify a delay before firing the next item  
+Use [Queue(delayed: ...)] to specify a delay before firing the next item
 
 ```dart
-import 'package:dart_queue/dart_queue.dart';
+import 'package:queue/queue.dart';
 
 main() async {
   final queue = Queue(parallel: 2);
@@ -73,7 +73,7 @@ main() async {
 
 #### On complete
 ```dart
-import 'package:dart_queue/dart_queue.dart';
+import 'package:queue/queue.dart';
 
 main() async {
   final queue = Queue(parallel: 2);
@@ -92,7 +92,7 @@ main() async {
 You can specify a delay before the next item is fired as per the following example:
 
 ```dart
-import 'package:dart_queue/dart_queue.dart';
+import 'package:queue/queue.dart';
 
 main() async {
   final queue = Queue(delay: Duration(milliseconds: 500)); // Set the delay here
@@ -127,7 +127,7 @@ This is necessary to close the `Queue.remainingItems` controller.
 If you want to query how many items are outstanding in the queue, listen to the Queue.remainingItems stream.
 
 ```dart
-import 'package:dart_queue/dart_queue.dart';
+import 'package:queue/queue.dart';
 final queue = Queue();
 
 final remainingItemsStream = queue.remainingItems.listen((numberOfItems)=>print(numberOfItems));
@@ -144,7 +144,7 @@ queue.dispose(); // Will clean up any resources in the queue if you are done wit
 
 ## Contributing
 
-Pull requests are welcome. There is a shell script `ci_checks.sh` that will run the checks to get 
+Pull requests are welcome. There is a shell script `ci_checks.sh` that will run the checks to get
 past CI and also format the code before committing. If that all passes your PR will likely be accepted.
 
 Please write tests to cover your new feature.

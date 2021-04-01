@@ -181,6 +181,28 @@ void main() {
       expect(errorQueue.activeItems.length, 0);
       expect(hitError, 101);
     });
+
+    test("it should honor priorities", () async {
+      final result = <int>[];
+      unawaited(queue.add(() async {
+        await Future.delayed(const Duration(milliseconds: 10));
+        result.add(1);
+      }));
+      unawaited(queue.add(() async {
+        await Future.delayed(const Duration(milliseconds: 10));
+        result.add(2);
+      }));
+      unawaited(queue.add(() async {
+        await Future.delayed(const Duration(milliseconds: 10));
+        result.add(3);
+      }, needsPriority: true));
+
+      await queue.onComplete;
+
+      expect(result[0], 1);
+      expect(result[1], 3);
+      expect(result[2], 2);
+    });
   });
 
   test('should cancel', () async {
@@ -232,6 +254,10 @@ void main() {
     expect(results.length, 3);
     expect(errors.length, 2);
     expect(errors.first is QueueCancelledException, true);
+    try {
+      cancelQueue.add(() => Future.value(5));
+      expect("this should never", "get called because the queue got cancelled");
+    } on QueueCancelledException catch (exception) {}
   });
 
   test("timed out queue item still completes", () async {
