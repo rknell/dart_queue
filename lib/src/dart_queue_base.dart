@@ -2,7 +2,7 @@ import 'dart:async';
 
 class _QueuedFuture<T> {
   final Completer completer;
-  final Future<T?> Function() closure;
+  final Future<T> Function() closure;
   final Duration? timeout;
   Function? onComplete;
 
@@ -12,7 +12,7 @@ class _QueuedFuture<T> {
 
   Future<void> execute() async {
     try {
-      T? result;
+      T result;
       Timer? timoutTimer;
 
       if (timeout != null) {
@@ -114,9 +114,9 @@ class Queue {
   /// by preceding closures have been awaited.
   ///
   /// Will throw an exception if the queue has been cancelled.
-  Future<T?> add<T>(Future<T> Function() closure) {
+  Future<T> add<T>(Future<T> Function() closure) {
     if (isCancelled) throw QueueCancelledException();
-    final completer = Completer<T?>();
+    final completer = Completer<T>();
     _nextCycle.add(_QueuedFuture<T>(closure, completer, timeout));
     _updateRemainingItems();
     unawaited(_process());

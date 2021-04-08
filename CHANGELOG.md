@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.1.0
+
+- BREAKING: Stopping forced nullability of responses. Was hiding a bunch of null errors that would crash an app on launch
+
 ## 3.0.0
 
 - Initial null safe release

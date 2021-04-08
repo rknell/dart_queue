@@ -161,7 +161,7 @@ void main() {
       int hitError = 0;
       final errorQueue = Queue(parallel: 10);
       for (var i = 0; i < 100; i++) {
-        unawaited(errorQueue.add(() async {
+        unawaited(errorQueue.add<Object?>(() async {
           await Future.delayed(const Duration(milliseconds: 100));
           throw Exception("test exception");
         }).catchError((err) {
@@ -248,5 +248,12 @@ void main() {
     expect(resultOrder.length, 2);
     expect(resultOrder.first, "timedout");
     expect(resultOrder[1], "test");
+  });
+
+  test("it handles null as expected", () async {
+    final queue = Queue();
+
+    final result = await queue.add(() async => null);
+    expect(result, null);
   });
 }
