@@ -137,7 +137,11 @@ class Queue {
   }
 
   void _updateRemainingItems() {
-    _remainingItemsController?.sink.add(_nextCycle.length + activeItems.length);
+    final remainingItemsController = _remainingItemsController;
+    if (remainingItemsController != null &&
+        remainingItemsController.isClosed == false) {
+      remainingItemsController.sink.add(_nextCycle.length + activeItems.length);
+    }
   }
 
   void _queueUpNext() {
