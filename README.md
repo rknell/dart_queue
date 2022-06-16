@@ -17,7 +17,7 @@ https://pub.dev/packages/alfred
 
 The most simple example:
 ```dart
-import 'package:dart_queue/dart_queue.dart';
+import 'package:queue/queue.dart';
 
 main() async {
   final queue = Queue();
@@ -32,7 +32,7 @@ main() async {
 A proof of concept:
 
 ```dart
-import 'package:dart_queue/dart_queue.dart';
+import 'package:queue/queue.dart';
 
 main() async {
   //Create the queue container
@@ -58,7 +58,7 @@ This doesn't work in batches and will fire the next item as soon as as there is 
 Use [Queue(delayed: ...)] to specify a delay before firing the next item  
 
 ```dart
-import 'package:dart_queue/dart_queue.dart';
+import 'package:queue/queue.dart';
 
 main() async {
   final queue = Queue(parallel: 2);
@@ -73,7 +73,7 @@ main() async {
 
 #### On complete
 ```dart
-import 'package:dart_queue/dart_queue.dart';
+import 'package:queue/queue.dart';
 
 main() async {
   final queue = Queue(parallel: 2);
@@ -92,7 +92,7 @@ main() async {
 You can specify a delay before the next item is fired as per the following example:
 
 ```dart
-import 'package:dart_queue/dart_queue.dart';
+import 'package:queue/queue.dart';
 
 main() async {
   final queue = Queue(delay: Duration(milliseconds: 500)); // Set the delay here
@@ -127,7 +127,7 @@ This is necessary to close the `Queue.remainingItems` controller.
 If you want to query how many items are outstanding in the queue, listen to the Queue.remainingItems stream.
 
 ```dart
-import 'package:dart_queue/dart_queue.dart';
+import 'package:queue/queue.dart';
 final queue = Queue();
 
 final remainingItemsStream = queue.remainingItems.listen((numberOfItems)=>print(numberOfItems));
