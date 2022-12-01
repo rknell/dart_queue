@@ -33,8 +33,8 @@ class _QueuedFuture<T> {
       //Make sure not to execute the next command until this future has completed
       timoutTimer?.cancel();
       await Future.microtask(() {});
-    } catch (e) {
-      completer.completeError(e);
+    } catch (e, stack) {
+      completer.completeError(e, stack);
     } finally {
       if (onComplete != null && !_timedOut) onComplete!();
     }
