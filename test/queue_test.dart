@@ -1,4 +1,3 @@
-import 'package:queue/queue.dart';
 import 'package:queue/src/dart_queue_base.dart';
 import 'package:test/test.dart';
 
