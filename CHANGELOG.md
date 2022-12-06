@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.1.0+2
+
+- Ensures stack trace isn't swallowed when an error occurs (thanks @Bungeefan)
+
 ## 3.1.0+1
 
 - Fix a bug which would break if the queue stream had been disposed and an item completes.
