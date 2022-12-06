@@ -1,5 +1,6 @@
 # queue
-[![Build Status](https://travis-ci.org/rknell/dart_queue.svg?branch=master)](https://travis-ci.org/rknell/dart_queue)
+
+[![Build Status](https://github.com/rknell/dart_queue/workflows/Dart/badge.svg)](https://github.com/rknell/dart_queue/actions)
 
 Easily queue futures and await their values.
 
