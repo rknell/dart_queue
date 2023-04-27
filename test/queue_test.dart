@@ -255,4 +255,51 @@ void main() {
     final result = await queue.add(() async => null);
     expect(result, null);
   });
+
+  test("cancel result 2 and continue next result3", () async {
+    final queue = Queue(delay: const Duration(milliseconds: 100));
+    final results = <String?>[];
+    final errors = <Exception>[];
+    final errorResults = <String?>[];
+
+    unawaited(queue
+        .add(() async {
+          await Future.delayed(const Duration(milliseconds: 10));
+          return "result 1";
+        })
+        .then((result) => results.add(result))
+        .catchError((err) {
+          errors.add(err);
+          errorResults.add('error 1');
+        }));
+
+    unawaited(queue
+        .add(() async {
+          await Future.delayed(const Duration(milliseconds: 10));
+          return "result 2";
+        })
+        .then((result) => results.add(result))
+        .catchError((err) {
+          errors.add(err);
+          errorResults.add('error 2');
+        }));
+
+    queue.cancel();
+
+    await queue
+        .add(() async {
+          await Future.delayed(const Duration(milliseconds: 10));
+          return "result 3";
+        })
+        .then((result) => results.add(result))
+        .catchError((err) {
+          errors.add(err);
+          errorResults.add('error 3');
+        });
+
+    expect(results.length, 2);
+    expect(errors.length, 1);
+    expect(errorResults.length, 1);
+    expect(errorResults.first, 'error 2');
+  });
 }

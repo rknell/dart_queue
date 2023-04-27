@@ -57,9 +57,7 @@ class Queue {
   /// Can be edited mid processing
   int parallel;
   int _lastProcessId = 0;
-  bool _isCancelled = false;
 
-  bool get isCancelled => _isCancelled;
   StreamController<int>? _remainingItemsController;
 
   Stream<int> get remainingItems {
@@ -93,7 +91,6 @@ class Queue {
       item.completer.completeError(QueueCancelledException());
     }
     _nextCycle.removeWhere((item) => item.completer.isCompleted);
-    _isCancelled = true;
   }
 
   /// Dispose of the queue
@@ -115,7 +112,6 @@ class Queue {
   ///
   /// Will throw an exception if the queue has been cancelled.
   Future<T> add<T>(Future<T> Function() closure) {
-    if (isCancelled) throw QueueCancelledException();
     final completer = Completer<T>();
     _nextCycle.add(_QueuedFuture<T>(closure, completer, timeout));
     _updateRemainingItems();
@@ -145,9 +141,7 @@ class Queue {
   }
 
   void _queueUpNext() {
-    if (_nextCycle.isNotEmpty &&
-        !isCancelled &&
-        activeItems.length <= parallel) {
+    if (_nextCycle.isNotEmpty && activeItems.length <= parallel) {
       final processId = _lastProcessId;
       activeItems.add(processId);
       final item = _nextCycle.first;
