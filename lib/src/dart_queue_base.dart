@@ -153,7 +153,6 @@ class Queue {
         activeItems.length <= parallel) {
       final processId = _lastProcessId;
       activeItems.add(processId);
-      if (!lifo) {}
       final item = lifo ? _nextCycle.last : _nextCycle.first;
       _lastProcessId++;
       _nextCycle.remove(item);
