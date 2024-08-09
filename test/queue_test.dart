@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:queue/src/dart_queue_base.dart';
 import 'package:test/test.dart';
 
@@ -179,6 +181,34 @@ void main() {
       await errorQueue.onComplete;
       expect(errorQueue.activeItems.length, 0);
       expect(hitError, 101);
+    });
+
+    group('remainingItemCount', () {
+      test('should return 0 if empty', () {
+        final queue = Queue();
+        expect(queue.remainingItemCount, 0);
+      });
+
+      test('should return active items and queued items', () async {
+        final queue = Queue(parallel: 1);
+
+        final firstRunCompleter = Completer();
+        final secondRunCompleter = Completer();
+        // This item will run
+        queue.add(() => firstRunCompleter.future);
+        // This item is be queued
+        queue.add(() => secondRunCompleter.future);
+
+        expect(queue.remainingItemCount, 2);
+
+        firstRunCompleter.complete();
+        await Future.delayed(Duration.zero);
+        expect(queue.remainingItemCount, 1);
+
+        secondRunCompleter.complete();
+        await Future.delayed(Duration.zero);
+        expect(queue.remainingItemCount, 0);
+      });
     });
   });
 

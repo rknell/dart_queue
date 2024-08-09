@@ -125,12 +125,22 @@ simply call queue.dispose();
 This is necessary to close the `Queue.remainingItems` controller.
 
 #### Reporting
-If you want to query how many items are outstanding in the queue, listen to the Queue.remainingItems stream.
+
+If you want to query how many items are outstanding in the queue once, you can use the getter `remainingItemCount`.
 
 ```dart
 import 'package:queue/queue.dart';
 final queue = Queue();
 
+final count = queue.remainingItemCount;
+```
+
+If you want to get notified when the remainingItemCount changes, listen to the Queue.remainingItems stream.
+
+```dart
+import 'package:queue/queue.dart';
+
+final queue = Queue();
 final remainingItemsStream = queue.remainingItems.listen((numberOfItems)=>print(numberOfItems));
 
 //Queue up a couple of futures

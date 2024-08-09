@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.2.0+3
+
+- Exposes `remainingItemCount`
+
 ## 3.1.0+2
 
 - Ensures stack trace isn't swallowed when an error occurs (thanks @Bungeefan)

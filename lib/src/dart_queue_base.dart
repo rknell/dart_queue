@@ -85,6 +85,10 @@ class Queue {
       "v4 - listen to the [remainingItems] stream to listen to queue status")
   Set<int> activeItems = {};
 
+  /// Returns the number of items that are currently processed
+  /// And the number of items in queue
+  int get remainingItemCount => _nextCycle.length + activeItems.length;
+
   /// Cancels the queue. Also cancels any unprocessed items throwing a [QueueCancelledException]
   ///
   /// Subsquent calls to [add] will throw.
@@ -140,7 +144,7 @@ class Queue {
     final remainingItemsController = _remainingItemsController;
     if (remainingItemsController != null &&
         remainingItemsController.isClosed == false) {
-      remainingItemsController.sink.add(_nextCycle.length + activeItems.length);
+      remainingItemsController.sink.add(remainingItemCount);
     }
   }
 
