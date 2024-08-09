@@ -168,6 +168,7 @@ void main() {
         }).catchError((err) {
           hitError++;
           expect(err.toString(), "Exception: test exception");
+          return err;
         }));
       }
       try {
