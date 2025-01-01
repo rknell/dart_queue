@@ -154,7 +154,7 @@ class Queue {
   void _queueUpNext() {
     if (_nextCycle.isNotEmpty &&
         !isCancelled &&
-        activeItems.length <= parallel) {
+        activeItems.length < parallel) {
       final processId = _lastProcessId;
       activeItems.add(processId);
       final item = lifo ? _nextCycle.last : _nextCycle.first;
