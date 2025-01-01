@@ -102,6 +102,23 @@ main() async {
 }
 ```
 
+#### LIFO (Last In First Out)
+You can configure the queue to process items in LIFO order (last in, first out) by setting the `lifo` parameter:
+
+```dart
+import 'package:queue/queue.dart';
+
+main() async {
+  // Create a LIFO queue
+  final queue = Queue(lifo: true);
+
+  // Add items to the queue
+  queue.add(() => Future.delayed(Duration(milliseconds: 100)));  // Will be processed last
+  queue.add(() => Future.delayed(Duration(milliseconds: 50)));   // Will be processed second
+  queue.add(() => Future.delayed(Duration(milliseconds: 10)));   // Will be processed first
+}
+```
+
 #### Adding items to the front of the queue
 You can add items to the front of the queue to process them sooner using the `addToFront` parameter:
 
