@@ -52,6 +52,9 @@ class Queue {
   /// A timeout before processing the next item in the queue
   final Duration? timeout;
 
+  /// Shoud we process this queue LIFO (last in first out)
+  final bool lifo;
+
   /// The number of items to process at one time
   ///
   /// Can be edited mid processing
@@ -110,7 +113,7 @@ class Queue {
     cancel();
   }
 
-  Queue({this.delay, this.parallel = 1, this.timeout});
+  Queue({this.delay, this.parallel = 1, this.timeout, this.lifo = false});
 
   /// Adds the future-returning closure to the queue.
   ///
@@ -154,7 +157,7 @@ class Queue {
         activeItems.length <= parallel) {
       final processId = _lastProcessId;
       activeItems.add(processId);
-      final item = _nextCycle.first;
+      final item = lifo ? _nextCycle.last : _nextCycle.first;
       _lastProcessId++;
       _nextCycle.remove(item);
       item.onComplete = () async {
