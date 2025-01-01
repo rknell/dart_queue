@@ -10,10 +10,6 @@ My use case was to rate limit calls to bluetooth devices. There were multiple bl
 
 Alternative use cases could be spidering a website, downloading a number of files, or rate limiting calls to an API.
 
-### :fire::fire::fire: Shameless plug! :fire::fire::fire:
-Want to write server apps in dart like ExpressJS? Check out my new open source plugin Alfred
-https://pub.dev/packages/alfred
-
 ## Usage
 
 The most simple example:
