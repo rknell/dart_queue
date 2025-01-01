@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:queue/src/dart_queue_base.dart';
 import 'package:test/test.dart';
 
@@ -166,6 +168,7 @@ void main() {
         }).catchError((err) {
           hitError++;
           expect(err.toString(), "Exception: test exception");
+          return err;
         }));
       }
       try {
@@ -180,6 +183,34 @@ void main() {
       expect(errorQueue.activeItems.length, 0);
       expect(hitError, 101);
     });
+
+    group('remainingItemCount', () {
+      test('should return 0 if empty', () {
+        final queue = Queue();
+        expect(queue.remainingItemCount, 0);
+      });
+
+      test('should return active items and queued items', () async {
+        final queue = Queue(parallel: 1);
+
+        final firstRunCompleter = Completer();
+        final secondRunCompleter = Completer();
+        // This item will run
+        queue.add(() => firstRunCompleter.future);
+        // This item is be queued
+        queue.add(() => secondRunCompleter.future);
+
+        expect(queue.remainingItemCount, 2);
+
+        firstRunCompleter.complete();
+        await Future.delayed(Duration.zero);
+        expect(queue.remainingItemCount, 1);
+
+        secondRunCompleter.complete();
+        await Future.delayed(Duration.zero);
+        expect(queue.remainingItemCount, 0);
+      });
+    });
   });
 
   test('should cancel', () async {
@@ -187,50 +218,60 @@ void main() {
     final results = <String?>[];
     final errors = <Exception>[];
 
+    final completer1 = Completer();
+    final completer2 = Completer();
+    final completer3 = Completer();
+    final completer4 = Completer();
+    final completer5 = Completer();
+
     unawaited(Future.wait([
       cancelQueue
           .add(() async {
-            await Future.delayed(const Duration(milliseconds: 10));
+            await completer1.future;
             return "result 1";
           })
           .then((result) => results.add(result))
           .catchError((err) => errors.add(err)),
       cancelQueue
           .add(() async {
-            await Future.delayed(const Duration(milliseconds: 10));
+            await completer2.future;
             return "result 2";
           })
           .then((result) => results.add(result))
           .catchError((err) => errors.add(err)),
       cancelQueue
           .add(() async {
-            await Future.delayed(const Duration(milliseconds: 10));
+            await completer3.future;
             return "result 3";
           })
           .then((result) => results.add(result))
           .catchError((err) => errors.add(err)),
       cancelQueue
           .add(() async {
-            await Future.delayed(const Duration(milliseconds: 10));
+            await completer4.future;
             return "result 4";
           })
           .then((result) => results.add(result))
           .catchError((err) => errors.add(err)),
       cancelQueue
           .add(() async {
-            await Future.delayed(const Duration(milliseconds: 10));
+            await completer5.future;
             return "result 5";
           })
           .then((result) => results.add(result))
           .catchError((err) => errors.add(err))
     ]));
 
-    await Future.delayed(const Duration(milliseconds: 25));
+    completer1.complete();
+    completer2.complete();
+    await Future.delayed(Duration.zero);
     cancelQueue.cancel();
+    completer3.complete();
     await cancelQueue.onComplete;
     expect(results.length, 3);
     expect(errors.length, 2);
-    expect(errors.first is QueueCancelledException, true);
+
+    expect(errors.first, isA<QueueCancelledException>());
   });
 
   test("timed out queue item still completes", () async {
