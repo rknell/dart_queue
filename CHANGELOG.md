@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.3.0
+
+- Added LIFO (Last In First Out) queue processing option
+- Fixed typos in documentation
+- Updated SDK constraint to support Dart 3
+
 ## 3.2.0+3
 
 - Exposes `remainingItemCount`
