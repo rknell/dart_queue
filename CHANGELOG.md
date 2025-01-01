@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.3.0+2
+
+- Fixed a bug where parallel task limit could be exceeded when tasks complete with delay
+
 ## 3.3.0+1
 
 - No code changes: Added missing changelog entry for LIFO functionality
