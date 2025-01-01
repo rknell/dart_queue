@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.4.0
+
+- Added ability to add items to the front of the queue using `addToFront` parameter (renamed from needsPriority for clarity)
+- Fixed obsolete imports in README examples
+
 ## 3.3.0+2
 
 - Fixed a bug where parallel task limit could be exceeded when tasks complete with delay
