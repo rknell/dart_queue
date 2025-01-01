@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.3.0+1
+
+- No code changes: Added missing changelog entry for LIFO functionality
+
 ## 3.3.0
 
 - Added LIFO (Last In First Out) queue processing option
