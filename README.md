@@ -105,6 +105,26 @@ main() async {
 }
 ```
 
+#### Adding items to the front of the queue
+You can add items to the front of the queue to process them sooner using the `addToFront` parameter:
+
+```dart
+import 'package:queue/queue.dart';
+
+main() async {
+  final queue = Queue();
+
+  // Add a regular item to the queue
+  queue.add(() => Future.delayed(Duration(milliseconds: 100)));
+  
+  // Add an urgent item that should be processed next
+  queue.add(
+    () => Future.delayed(Duration(milliseconds: 50)),
+    addToFront: true
+  );
+}
+```
+
 #### Cancel
 
 If you need to stop a queue from processing call Queue.cancel();

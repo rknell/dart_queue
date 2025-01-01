@@ -182,7 +182,7 @@ void main() {
       expect(hitError, 101);
     });
 
-    test("it should honor priorities", () async {
+    test("it should honor addToFront parameter", () async {
       final result = <int>[];
       unawaited(queue.add(() async {
         await Future.delayed(const Duration(milliseconds: 10));
@@ -195,7 +195,7 @@ void main() {
       unawaited(queue.add(() async {
         await Future.delayed(const Duration(milliseconds: 10));
         result.add(3);
-      }, needsPriority: true));
+      }, addToFront: true));
 
       await queue.onComplete;
 

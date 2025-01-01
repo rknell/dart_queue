@@ -111,16 +111,16 @@ class Queue {
   /// Adds the future-returning closure to the queue.
   ///
   /// It will be executed after futures returned
-  /// by preceding closures have been awaited if [needsPriority] is false. If
-  /// [needsPriority] is true it gets executed within the next free slot.
+  /// by preceding closures have been awaited if [addToFront] is false. If
+  /// [addToFront] is true it gets executed within the next free slot by being
+  /// added to the front of the queue.
   ///
   /// Will throw an exception if the queue has been cancelled.
-  Future<T?> add<T>(Future<T> Function() closure,
-      {bool needsPriority = false}) {
+  Future<T?> add<T>(Future<T> Function() closure, {bool addToFront = false}) {
     if (isCancelled) throw QueueCancelledException();
     final completer = Completer<T?>();
     final item = _QueuedFuture<T>(closure, completer, timeout);
-    needsPriority ? _nextCycle.insert(0, item) : _nextCycle.add(item);
+    addToFront ? _nextCycle.insert(0, item) : _nextCycle.add(item);
     _updateRemainingItems();
     unawaited(_process());
     return completer.future;
