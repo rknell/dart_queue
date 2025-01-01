@@ -38,17 +38,17 @@ import 'package:queue/queue.dart';
 main() async {
   //Create the queue container
   final Queue queue = Queue(delay: Duration(milliseconds: 10));
-  
+
   //Add items to the queue asyncroniously
   queue.add(()=>Future.delayed(Duration(milliseconds: 100)));
   queue.add(()=>Future.delayed(Duration(milliseconds: 10)));
-  
+
   //Get a result from the future in line with await
   final result = await queue.add(() async {
     await Future.delayed(Duration(milliseconds: 1));
     return "Future Complete";
   });
-  
+
   //100, 10, 1 will reslove in that order.
   result == "Future Complete"; //true
 }
@@ -56,7 +56,7 @@ main() async {
 
 #### Parallel processing
 This doesn't work in batches and will fire the next item as soon as as there is space in the queue
-Use [Queue(delayed: ...)] to specify a delay before firing the next item  
+Use [Queue(delayed: ...)] to specify a delay before firing the next item
 
 ```dart
 import 'package:queue/queue.dart';
@@ -103,6 +103,26 @@ main() async {
   final result2 = await queue.add(()=>Future.delayed(Duration(milliseconds: 10)));
 
   //Thats it!
+}
+```
+
+#### Adding items to the front of the queue
+You can add items to the front of the queue to process them sooner using the `addToFront` parameter:
+
+```dart
+import 'package:queue/queue.dart';
+
+main() async {
+  final queue = Queue();
+
+  // Add a regular item to the queue
+  queue.add(() => Future.delayed(Duration(milliseconds: 100)));
+  
+  // Add an urgent item that should be processed next
+  queue.add(
+    () => Future.delayed(Duration(milliseconds: 50)),
+    addToFront: true
+  );
 }
 ```
 
@@ -155,7 +175,7 @@ queue.dispose(); // Will clean up any resources in the queue if you are done wit
 
 ## Contributing
 
-Pull requests are welcome. There is a shell script `ci_checks.sh` that will run the checks to get 
+Pull requests are welcome. There is a shell script `ci_checks.sh` that will run the checks to get
 past CI and also format the code before committing. If that all passes your PR will likely be accepted.
 
 Please write tests to cover your new feature.

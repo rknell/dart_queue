@@ -1,0 +1,51 @@
+# Pull Request Review Workflow
+
+## Initial Checks
+- fetch latest changes: `git fetch origin | cat`
+- check for pull requests: `gh pr list | cat`
+- verify the PR author has signed the CLA (if required)
+- check if PR is targeting the correct branch: `gh pr view {number} | cat`
+
+## Security & Code Review
+- review the pull request to make sure it doesn't contain anything malicious or obfuscated: `gh pr diff {number} | cat`
+- scan for sensitive data or credentials
+- check for potential security vulnerabilities
+- verify code follows project style guidelines and conventions
+- review documentation updates
+
+## Issue & Context Review
+- check the conversation of the pull request: `gh pr view {number} --comments | cat`
+- verify linked issues exist and are properly referenced
+- ensure PR description is clear and complete
+- check if PR requires updates to API documentation
+
+## Quality Checks
+- ensure the pull request doesn't break any CI checks: `gh pr checks {number} | cat`
+- verify all status checks are passing
+- ensure the pull request is covered by tests
+- check test coverage meets minimum requirements: `dart test --coverage | cat`
+- ensure the pull request doesn't break or delete any previous tests
+- run local tests to verify functionality: `dart test | cat`
+- check for performance regressions
+
+## Impact Analysis
+- ensure the pull request won't introduce breaking changes
+- review dependency updates and their impact: `dart pub outdated | cat`
+- check for backward compatibility
+- verify API changes are documented
+
+## Merge Process
+- if the pull request passes all requirements:
+  - approve the PR: `gh pr review {number} --approve | cat`
+  - add appropriate labels: `gh pr edit {number} --add-label "{label}" | cat`
+  - merge using appropriate strategy: `gh pr merge {number} --{squash|merge|rebase} | cat`
+  - delete branch if no longer needed: `git branch -d {branch} | cat`
+
+## Post-Merge Tasks
+- add necessary updates to the README.md
+- update the CHANGELOG.md with new changes
+- push the commit to github: `git push origin master | cat`
+- update version numbers if needed
+- publish to pub.dev: `dart pub publish | cat`
+- verify deployment (if applicable)
+- close related issues: `gh issue close {number} | cat`
