@@ -1,5 +1,12 @@
 # Changelog
 
+## 3.4.0
+
+- Added ability to add items to the front of the queue (renamed from needsPriority to addToFront for clarity)
+- Fixed obsolete imports in README examples
+
+## 3.3.0+2
+
 ## 3.0.0-nullsafety.0
 
 - Initial null safe release
